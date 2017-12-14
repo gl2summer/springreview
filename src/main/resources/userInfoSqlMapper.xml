@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+	<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+	例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀) -->
+	<mapper namespace="com.hao.storage.UserInfoMapper">
+
+   
+    <!-- 创建表 -->
+    <update id="createTable">
+        create table if not exists user (id int primary key auto_increment, name varchar(20),age int);
+    </update>
+    <!-- 添加数据 -->
+    <insert id="add" parameterType="com.hao.storage.UserInfo">
+        insert into user(name,age) value(#{name},#{age});
+    </insert>
+    <!-- 删除数据 -->
+    <delete id="del" parameterType="int">
+        delete from user where id = #{id};
+    </delete>
+    <!-- 修改数据 -->
+    <update id="update" parameterType="com.hao.storage.UserInfo">
+        update user set name=#{name},age=#{age} where id=#{id};
+    </update>
+    <!--根据id查询得到一个user对象-->
+    <select id="getUserInfo" parameterType="int" resultType="com.hao.storage.UserInfo">
+        select * from user where id=#{id};
+    </select>
+    <!-- 查询所有的用户 -->
+    <select id="list" resultType="com.hao.storage.UserInfo">
+        select * from user;
+    </select>
+</mapper>

@@ -1,6 +1,7 @@
 package com.hao.io;
 
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -14,11 +15,18 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-public class NettyServer implements DataOutput {
+public class NettyServer extends Thread implements DataInput, DataOutput {
 
-	private DataInput dataInput = null;
+	private static final int dataRecvBytesMin = 32;
+	private static final int dataRecvBytesMax = 2048;
 
-	public void start(int port) throws InterruptedException {
+	private int port = 0;
+	private DataInputCb dataInputCb = null;// 当接收到数据时，回调
+	private byte[] dataRecvedBuff = null;// 当回调接口为null时，数据将缓存
+	private int dataRecvedLength = 0;// 当前缓存的数据长度
+
+	@Override
+	public void run() {
 		ServerBootstrap b = new ServerBootstrap();
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
@@ -40,16 +48,29 @@ public class NettyServer implements DataOutput {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
-			group.shutdownGracefully().sync();
+			try {
+				group.shutdownGracefully().sync();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-
-	public DataInput getDataInput() {
-		return dataInput;
+	
+	public void start(int port) {
+		this.port = port;
+		start();
 	}
 
-	public void setDataInput(DataInput dataInput) {
-		this.dataInput = dataInput;
+	public void setDataInputCb(DataInputCb dataInputCb) {
+		this.dataInputCb = dataInputCb;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
 	}
 
 	public boolean dateSend(Object obj, byte[] datas) {
@@ -65,17 +86,40 @@ public class NettyServer implements DataOutput {
 	public boolean setTimeout(Integer timeout) {
 		return false;
 	}
+	
+	public void dataOutputStart() {
+		start(port);
+	}
 
 	class ServerInHandler extends ChannelInboundHandlerAdapter {
 
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 			ByteBuf byteBuf = (ByteBuf) msg;
-			byte[] datas = new byte[byteBuf.readableBytes()];
+			int datasLen = byteBuf.readableBytes();
+			byte[] datas = new byte[datasLen];
 			byteBuf.readBytes(datas);
-			if (dataInput != null) {
-				dataInput.dataRecv(ctx, datas);
+
+			synchronized (this) {
+				// 若接收数据回调存在，则回调，否则数据将被缓存
+				if (dataInputCb != null) {
+					dataInputCb.dataRecv(ctx, datas);
+				} else {
+					if (dataRecvedBuff == null) {
+						dataRecvedBuff = new byte[datasLen + dataRecvBytesMin];// 申请初始数组
+						dataRecvedLength = 0;// 初始化缓存长度
+					}
+					int restLen = dataRecvedBuff.length - dataRecvedLength;
+					if (restLen < datasLen) {
+						int newLength = dataRecvedLength + datasLen + dataRecvBytesMin;
+						Arrays.copyOf(dataRecvedBuff, newLength);// 扩大缓存
+					}
+
+					System.arraycopy(datas, 0, dataRecvedBuff, dataRecvedLength, datasLen);
+					dataRecvedLength += datasLen;
+				}
 			}
+
 			byteBuf.release();
 		}
 
@@ -87,9 +131,21 @@ public class NettyServer implements DataOutput {
 		@Override
 		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 			cause.printStackTrace();
-			//ctx.close();
+			// ctx.close();
 		}
 
+	}
+
+	public boolean takeData(Object obj, byte[] buff) {
+
+		synchronized (this) {
+			if (dataRecvedBuff == null) {
+				return false;
+			}
+			System.arraycopy(dataRecvedBuff, 0, buff, 0, dataRecvedLength);
+			dataRecvedLength = 0;
+			return true;
+		}
 	}
 
 }

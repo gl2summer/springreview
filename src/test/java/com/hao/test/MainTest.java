@@ -11,7 +11,5 @@ public class MainTest {
 
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
 
-		MyLogger.debug("debug message");
-		MyLogger.info("info message");
 	}
 }

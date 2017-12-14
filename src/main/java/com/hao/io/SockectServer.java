@@ -2,7 +2,7 @@ package com.hao.io;
 
 public class SockectServer implements DataOutput {
 
-	private DataInput dataInput = null;
+	private DataInputCb dataInput = null;
 
 	public boolean dateSend(Object obj, byte[] datas) {
 		return false;
@@ -12,9 +12,13 @@ public class SockectServer implements DataOutput {
 		return false;
 	}
 
-	public SockectServer(DataInput dataInput) {
+	public SockectServer(DataInputCb dataInput) {
 		super();
 		this.dataInput = dataInput;
+	}
+
+	public void dataOutputStart() {
+		
 	}
 
 }
