@@ -1,1 +1,10 @@
-2017-12-14 15:55:37,129-[INFO] INFO main com.hao.logger.MyLogger - info message
+2017-12-15 11:12:28,850 [INFO] main: com.hao.logger.Test1 - info message
+2017-12-15 11:22:59,472 [INFO] main: com.hao.logger.Test1 - info message
+2017-12-15 11:25:06,186 [INFO] main: com.hao.logger.Test1 - info message
+2017-12-15 11:25:20,128 [INFO] main: com.hao.logger.Test1 - info message
+2017-12-15 11:26:37,912 [INFO] main: com.hao.logger.Test1 - info message
+2017-12-15 11:31:44,611 [INFO] main: com.hao.logger.Test1 - info message
+2017-12-15 11:37:22,450 [INFO] main: com.hao.logger.MyLogger - info message
+2017-12-15 11:38:37,428 [INFO] main: com.hao.logger.MyLogger - info message
+2017-12-15 11:38:41,134 [INFO] main: com.hao.logger.MyLogger - info message
+2017-12-15 11:39:42,269 [INFO] main: com.hao.logger.Test1 - info message

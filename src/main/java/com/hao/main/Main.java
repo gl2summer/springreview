@@ -1,9 +1,11 @@
 package com.hao.main;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.hao.logger.MyLogger;
 import com.hao.model.MySystem1Manager;
 
 public class Main {

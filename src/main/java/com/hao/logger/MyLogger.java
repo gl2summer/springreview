@@ -4,49 +4,156 @@ import org.apache.log4j.Logger;
 
 public class MyLogger {
 
-	private static Logger logger = Logger.getLogger(MyLogger.class);
-
 	public static void debug(Object message, Throwable t) {
-		logger.debug(message, t);
+		try {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			String className = stackTraceElements[2].getClassName();
+			Class<?> clazz = Class.forName(className);
+			Logger logger = Logger.getLogger(clazz);
+			logger.debug(message, t);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void debug(Object message) {
-		logger.debug(message);
+		try {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			String className = stackTraceElements[2].getClassName();
+			Class<?> clazz = Class.forName(className);
+			Logger logger = Logger.getLogger(clazz);
+			logger.debug(message);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void error(Object message) {
-		logger.error(message);
+
+		try {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			String className = stackTraceElements[2].getClassName();
+			Class<?> clazz = Class.forName(className);
+			Logger logger = Logger.getLogger(clazz);
+			logger.error(message);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void error(Object message, Throwable t) {
-		logger.error(message, t);
+
+		try {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			String className = stackTraceElements[2].getClassName();
+			Class<?> clazz = Class.forName(className);
+			Logger logger = Logger.getLogger(clazz);
+			logger.error(message, t);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void fatal(Object message) {
-		logger.fatal(message);
+
+		try {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			String className = stackTraceElements[2].getClassName();
+			Class<?> clazz = Class.forName(className);
+			Logger logger = Logger.getLogger(clazz);
+			logger.fatal(message);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void fatal(Object message, Throwable t) {
-		logger.fatal(message, t);
+
+		try {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			String className = stackTraceElements[2].getClassName();
+			Class<?> clazz = Class.forName(className);
+			Logger logger = Logger.getLogger(clazz);
+			logger.fatal(message, t);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void info(Object message) {
-		logger.info(message);
+
+		try {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			String className = stackTraceElements[2].getClassName();
+			Class<?> clazz = Class.forName(className);
+			Logger logger = Logger.getLogger(clazz);
+			logger.info(message);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void info(Object message, Throwable t) {
-		logger.info(message, t);
+
+		try {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			String className = stackTraceElements[2].getClassName();
+			Class<?> clazz = Class.forName(className);
+			Logger logger = Logger.getLogger(clazz);
+			logger.info(message, t);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void warn(Object message) {
-		logger.warn(message);
+
+		try {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			String className = stackTraceElements[2].getClassName();
+			Class<?> clazz = Class.forName(className);
+			Logger logger = Logger.getLogger(clazz);
+			logger.warn(message);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void warn(Object message, Throwable t) {
-		logger.warn(message, t);
+
+		try {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			String className = stackTraceElements[2].getClassName();
+			Class<?> clazz = Class.forName(className);
+			Logger logger = Logger.getLogger(clazz);
+			logger.warn(message, t);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public static Logger getLogger() {
-		return logger;
+
+	public static Logger getLogger(Class clazz) {
+		return Logger.getLogger(clazz);
 	}
 }
